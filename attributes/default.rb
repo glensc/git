@@ -36,5 +36,12 @@ else
   default['git']['checksum'] = 'bdc1768f70ce3d8f3e4edcdcd99b2f85a7f8733fb684398aebe58dde3e6bcca2'
 end
 
+default['git']['package'] = value_for_platform_family(
+  'omnios' => 'developer/versioning/git',
+  'smartos' => 'scmgit',
+  'pld' => 'git-core',
+  'default' => 'git'
+)
+
 default['git']['server']['base_path'] = '/srv/git'
 default['git']['server']['export_all'] = 'true'

@@ -17,18 +17,6 @@
 # limitations under the License.
 
 case node['platform_family']
-when 'debian'
-  if node['platform'] == 'ubuntu' && node['platform_version'].to_f < 10.10
-    package 'git-core'
-  else
-    package 'git'
-  end
-when 'rhel', 'fedora'
-  case node['platform_version'].to_i
-  when 5
-    include_recipe 'yum-epel'
-  end
-  package 'git'
 when 'windows'
   include_recipe 'git::windows'
 when 'mac_os_x'
@@ -41,13 +29,16 @@ when 'mac_os_x'
     type 'pkg'
     action :install
   end
+when 'rhel','fedora'
+  case node['platform_version'].to_i
+  when 5
+    include_recipe 'yum::epel'
+  end
+  package 'git' do
+    package_name node['git']['package']
+  end
 else
   package 'git' do
-    package_name case node['platform']
-                 when 'omnios'
-                   'developer/versioning/git'
-                 when 'smartos'
-                   'scmgit'
-                 end
+    package_name node['git']['package']
   end
 end
